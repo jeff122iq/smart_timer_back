@@ -13,6 +13,7 @@ import { BriefsModule } from './briefs/briefs.module';
 import { SeedersModule } from './seeders/seeders.module';
 import { TemplatesModule } from './templates/templates.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { CategoriesModule } from './categories/categories.module';
     TagsModule,
     CategoriesModule,
     CardsModule,
+    CategoriesTagsModule,
   ],
-
 })
 export class AppModule {}
