@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
@@ -7,7 +7,7 @@ import { Seeder } from './seeders/seeders';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
-
+    app.useGlobalPipes(new ValidationPipe());
     const logger = app.get(Logger);
     const seeder = app.get(Seeder);
 
