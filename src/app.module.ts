@@ -1,20 +1,46 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { TagsModule } from './tags/tags.module';
+import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { TokenModule } from './token/token.module';
+import { CardsModule } from './cards/cards.module';
 import configuration from '../config/configuration';
+import { BriefsModule } from './briefs/briefs.module';
+import { SeedersModule } from './seeders/seeders.module';
+import { TemplatesModule } from './templates/templates.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
     }),
-    TypeOrmModule.forRoot({
-      ...configuration().database,
-      type: 'mysql',
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('database.host'),
+        port: configService.get('database.port'),
+        username: configService.get('database.username'),
+        password: configService.get('database.password'),
+        database: configService.get('database.database'),
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
     }),
+    UsersModule,
+    RolesModule,
+    SeedersModule,
+    TokenModule,
+    BriefsModule,
+    TemplatesModule,
+    TagsModule,
+    CategoriesModule,
+    CardsModule,
   ],
 })
 export class AppModule {}
