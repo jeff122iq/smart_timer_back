@@ -13,6 +13,7 @@ import { BriefsModule } from './briefs/briefs.module';
 import { SeedersModule } from './seeders/seeders.module';
 import { TemplatesModule } from './templates/templates.module';
 import { CategoriesModule } from './categories/categories.module';
+import { TemplatesTagsModule } from './templates-tags/templates-tags.module';
 import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
 
 @Module({
@@ -34,16 +35,17 @@ import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
+    TagsModule,
     UsersModule,
     RolesModule,
-    SeedersModule,
-    AuthModule,
     TokenModule,
-    BriefsModule,
-    TemplatesModule,
-    TagsModule,
-    CategoriesModule,
     CardsModule,
+    BriefsModule,
+    SeedersModule,
+    TemplatesModule,
+    CategoriesModule,
+    TemplatesTagsModule,
     CategoriesTagsModule,
   ],
 })
