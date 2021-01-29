@@ -8,9 +8,9 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from './../users/users.module';
 import { TokenModule } from './../token/token.module';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
 import { Tokens } from '../helpers/entities/tokens.entity';
+import { JwtStrategy } from '../helpers/strategies/jwt.strategy';
+import { LocalStrategy } from '../helpers/strategies/local.strategy';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { Tokens } from '../helpers/entities/tokens.entity';
       useFactory: async (configService: ConfigService) => {
         return {
           secret: configService.get('jwt.secret'),
-          signOptions: { expiresIn: '15s' },
+          signOptions: { expiresIn: '1y' },
         };
       },
       inject: [ConfigService],

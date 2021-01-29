@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async login(user: IUser): Promise<ITokenLoginData> {
-    const payload: ITokenPayload = { sub: user.id };
+    const payload: ITokenPayload = { sub: user.id, email: user.email };
     return this.generateTokens(payload);
   }
 
@@ -41,9 +41,9 @@ export class AuthService {
   ): Promise<ITokenLoginData> {
     try {
       const token = await this.tokenService.findOneAndDelete(refresh_token_id);
-      
-      const { sub } = this.jwtService.verify(token.token);
-      const payload: ITokenPayload = { sub };
+
+      const { sub, email } = this.jwtService.verify(token.token);
+      const payload: ITokenPayload = { sub, email };
       return this.generateTokens(payload);
     } catch (error) {
       console.log(error.message);
