@@ -44,5 +44,6 @@ import { CategoriesModule } from './categories/categories.module';
     CategoriesModule,
     CardsModule,
   ],
+
 })
 export class AppModule {}

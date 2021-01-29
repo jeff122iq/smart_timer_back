@@ -7,6 +7,6 @@ export default () => ({
     database: process.env.DB_NAME,
   },
   jwt: {
-    secret: 'secretKey',
+    secret: process.env.JWT_SECRET,
   },
 });
