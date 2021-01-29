@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TagsModule } from './tags/tags.module';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { TokenModule } from './token/token.module';
@@ -23,7 +24,7 @@ import { CategoriesModule } from './categories/categories.module';
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
         host: configService.get('database.host'),
-        port: configService.get('database.port'),
+        port: +configService.get('database.port'),
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
@@ -35,6 +36,7 @@ import { CategoriesModule } from './categories/categories.module';
     UsersModule,
     RolesModule,
     SeedersModule,
+    AuthModule,
     TokenModule,
     BriefsModule,
     TemplatesModule,
