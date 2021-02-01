@@ -16,6 +16,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { TemplatesTagsModule } from './templates-tags/templates-tags.module';
 import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
 import { CardsTagsModule } from './cards-tags/cards-tags.module';
+import { BriefsCardsModule } from './briefs-cards/briefs-cards.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { CardsTagsModule } from './cards-tags/cards-tags.module';
     TemplatesTagsModule,
     CategoriesTagsModule,
     CardsTagsModule,
+    BriefsCardsModule,
   ],
 })
 export class AppModule {}
