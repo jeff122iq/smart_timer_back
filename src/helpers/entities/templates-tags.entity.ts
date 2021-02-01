@@ -1,10 +1,13 @@
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Tags } from './tags.entity';
 import { Templates } from './templates.entity';
 
 @Entity({ name: 'TemplatesTags' })
 export class TemplatesTags {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @JoinColumn({ name: 'template_id' })
   @ManyToOne((_) => Templates, (templates) => templates.templatesTags, {
     primary: true,
