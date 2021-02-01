@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriesTags } from 'src/helpers/entities/categories-tags.entity';
 import { Repository } from 'typeorm';
@@ -16,7 +16,7 @@ export class CategoriesTagsService {
       await this.categoriesTagsRepository.insert(newRecord);
       return HttpStatus.CREATED;
     } catch (error) {
-      console.log(error);
+      throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
     }
   }
 }
