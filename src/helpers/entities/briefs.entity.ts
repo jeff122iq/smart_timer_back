@@ -20,7 +20,7 @@ export class Briefs {
 
   @ManyToOne((_) => Users, (user) => user.briefs, { nullable: false })
   @JoinColumn({ name: 'user_id' })
-  user: Array<Users>;
+  user: Array<Users> | number;
 
   @OneToMany((_) => BriefsCards, (briefsCards) => briefsCards.brief)
   briefsCards: BriefsCards[];
