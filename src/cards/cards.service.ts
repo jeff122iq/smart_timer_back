@@ -33,8 +33,8 @@ export class CardsService {
   }
 
   async edit(editCardDto: EditCardDTO) {
-    const { id, description, title } = editCardDto;
-    const newValue = this.cardsRepository.create({ description, title });
+    const { id, description, title, isMainFiled} = editCardDto;
+    const newValue = this.cardsRepository.create({ description, title, isMainFiled });
     await this.cardsRepository.update({ id }, newValue);
     return HttpStatus.OK;
   }
