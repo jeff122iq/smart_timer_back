@@ -1,7 +1,8 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CardsTags } from 'src/helpers/entities/cards-tags.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+
+import { CardsTags } from 'src/helpers/entities/cards-tags.entity';
 
 @Injectable()
 export class CardsTagsService {
@@ -17,6 +18,15 @@ export class CardsTagsService {
       return HttpStatus.CREATED;
     } catch (error) {
       throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async deleteById(id: number) {
+    try {
+      await this.cardsTagsRepository.delete(id);
+      return HttpStatus.OK;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

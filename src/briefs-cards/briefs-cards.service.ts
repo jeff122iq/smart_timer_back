@@ -1,7 +1,8 @@
-import { BriefsCards } from './../helpers/entities/briefs-cards.entity';
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+
+import { BriefsCards } from './../helpers/entities/briefs-cards.entity';
 
 @Injectable()
 export class BriefsCardsService {
@@ -30,6 +31,15 @@ export class BriefsCardsService {
       return HttpStatus.OK;
     } catch (error) {
       throw new HttpException('Cannot update data', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async deleteById(id: number) {
+    try {
+      await this.briefsCardsRepository.delete(id);
+      return HttpStatus.OK;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

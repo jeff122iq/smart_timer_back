@@ -1,7 +1,8 @@
-import { TemplatesTags } from './../helpers/entities/templates-tags.entity';
-import { Injectable, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+
+import { TemplatesTags } from './../helpers/entities/templates-tags.entity';
 
 @Injectable()
 export class TemplatesTagsService {
@@ -17,6 +18,15 @@ export class TemplatesTagsService {
       return HttpStatus.CREATED;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async deleteById(id: number) {
+    try {
+      await this.templatesTagsRepository.delete(id);
+      return HttpStatus.OK;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }
