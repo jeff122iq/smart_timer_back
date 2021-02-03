@@ -6,5 +6,5 @@ export class EditCardDTO {
 
   title: string;
   description: string;
-  isMainFiled: boolean;
+  isMainField: boolean;
 }

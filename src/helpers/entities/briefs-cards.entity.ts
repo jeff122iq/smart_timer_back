@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Briefs } from './briefs.entity';
 import { Cards } from 'src/helpers/entities/cards.entity';
@@ -9,11 +15,17 @@ export class BriefsCards {
   id: number;
 
   @JoinColumn({ name: 'brief_id' })
-  @ManyToOne((_) => Briefs, (briefs) => briefs.briefsCards, { primary: true })
+  @ManyToOne((_) => Briefs, (briefs) => briefs.briefsCards, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   brief: Briefs | number;
 
   @JoinColumn({ name: 'card_id' })
-  @ManyToOne((_) => Cards, (cards) => cards.briefsCards, { primary: true })
+  @ManyToOne((_) => Cards, (cards) => cards.briefsCards, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   card: Cards | number;
 
   @Column({ nullable: false })

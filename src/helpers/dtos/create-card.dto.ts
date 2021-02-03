@@ -11,5 +11,5 @@ export class CreateCardDTO {
 
   @IsNotEmpty()
   @IsBoolean()
-  isMainFiled: boolean;
+  isMainField: boolean;
 }
