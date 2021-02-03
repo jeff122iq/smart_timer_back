@@ -25,20 +25,16 @@ import { BriefsCardsModule } from './briefs-cards/briefs-cards.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        console.log(configService.get('database'));
-
-        return {
-          type: 'mysql',
-          host: configService.get('database.host'),
-          port: +configService.get('database.port'),
-          username: configService.get('database.username'),
-          password: configService.get('database.password'),
-          database: configService.get('database.database'),
-          entities: ['dist/**/*.entity{.ts,.js}'],
-          synchronize: true,
-        };
-      },
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('database.host'),
+        port: +configService.get('database.port'),
+        username: configService.get('database.username'),
+        password: configService.get('database.password'),
+        database: configService.get('database.database'),
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
       inject: [ConfigService],
     }),
     AuthModule,

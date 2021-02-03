@@ -18,15 +18,10 @@ export class UsersSeederService {
       return await this.usersRepository
         .findOne({ email: user.email })
         .then(async (dbUser) => {
-          console.log(dbUser);
-          
           if (dbUser) {
             return Promise.resolve(null);
           }
-          const newUser = this.usersRepository.create(user);
-          await this.usersRepository.insert(newUser);
-          const res = await this.usersRepository.find();
-          return Promise.resolve(true);
+          return Promise.resolve(this.usersRepository.insert(user));
         })
         .catch((err) => Promise.reject(err));
     });
