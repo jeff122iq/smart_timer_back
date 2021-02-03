@@ -15,11 +15,14 @@ export class Cards {
   description: string;
 
   @Column({ type: 'boolean', nullable: false })
-  isMainFiled: boolean;
+  isMainField: boolean;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: string;
 
   @OneToMany((_) => CardsTags, (categoriesTags) => categoriesTags.card)
   cardsTags: Array<CardsTags>;
 
   @OneToMany((_) => BriefsCards, (briefsCards) => briefsCards.card)
-  briefsCards: BriefsCards[];
+  briefsCards: Array<BriefsCards>;
 }

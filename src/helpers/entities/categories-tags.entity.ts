@@ -11,10 +11,14 @@ export class CategoriesTags {
   @JoinColumn({ name: 'category_id' })
   @ManyToOne((_) => Categories, (categories) => categories.categoriesTags, {
     primary: true,
+    onDelete: 'CASCADE',
   })
   category: Array<Categories> | number;
 
   @JoinColumn({ name: 'tag_id' })
-  @ManyToOne((_) => Tags, (tag) => tag.categoriesTags, { primary: true })
+  @ManyToOne((_) => Tags, (tag) => tag.categoriesTags, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   tag: Array<Tags> | number;
 }

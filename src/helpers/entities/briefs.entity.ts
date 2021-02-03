@@ -18,7 +18,10 @@ export class Briefs {
   @Column({ type: 'nvarchar', length: 100, nullable: false })
   name: string;
 
-  @ManyToOne((_) => Users, (user) => user.briefs, { nullable: false })
+  @ManyToOne((_) => Users, (user) => user.briefs, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: Array<Users> | number;
 

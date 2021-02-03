@@ -11,10 +11,14 @@ export class TemplatesTags {
   @JoinColumn({ name: 'template_id' })
   @ManyToOne((_) => Templates, (templates) => templates.templatesTags, {
     primary: true,
+    onDelete: 'CASCADE',
   })
   template: Array<Templates> | number;
 
   @JoinColumn({ name: 'tag_id' })
-  @ManyToOne((_) => Tags, (tag) => tag.templatesTags, { primary: true })
+  @ManyToOne((_) => Tags, (tag) => tag.templatesTags, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   tag: Array<Tags> | number;
 }
