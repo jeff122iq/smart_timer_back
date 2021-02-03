@@ -1,3 +1,4 @@
+import { RolesService } from './../roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { ITokenLoginData } from 'src/helpers/interfaces/token-login-data.interfa
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly rolesService: RolesService,
     private readonly jwtService: JwtService,
     private readonly tokenService: TokenService,
   ) {}
@@ -31,14 +33,19 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IUser): Promise<ITokenLoginData> {
+  async login(user: IUser) {
     const payload: ITokenPayload = { sub: user.id, email: user.email };
-    return this.generateTokens(payload);
+    console.log(user);
+    const role = await this.rolesService.getById((user.role as any).id);
+
+    return {
+      ...(await this.generateTokens(payload)),
+      email: user.email,
+      role: role.name,
+    };
   }
 
-  async validateRefreshToken(
-    refresh_token_id: string,
-  ): Promise<ITokenLoginData> {
+  async validateRefreshToken(refresh_token_id: string) {
     try {
       const token = await this.tokenService.findOneAndDelete(refresh_token_id);
 
@@ -52,9 +59,7 @@ export class AuthService {
     }
   }
 
-  private async generateTokens(
-    payload: ITokenPayload,
-  ): Promise<ITokenLoginData> {
+  private async generateTokens(payload: ITokenPayload) {
     const access_token = this.jwtService.sign(payload);
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '1m' });
     const refresh_token_id = await this.tokenService.insert(

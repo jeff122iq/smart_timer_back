@@ -5,7 +5,6 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { Tags } from './../helpers/entities/tags.entity';
 import { EditTagDTO } from './../helpers/dtos/edit-tag.dto';
 import { CreateTagDTO } from './../helpers/dtos/create-tag.dto';
-import { IAutoFilling } from './../helpers/interfaces/auto-filling.interface';
 
 @Injectable()
 export class TagsService {
@@ -16,11 +15,7 @@ export class TagsService {
   async create(createTagDto: CreateTagDTO): Promise<any> {
     try {
       const res = await this.tagsRepository.insert(createTagDto);
-      const newRecord = await this.tagsRepository.findOne(
-        res.identifiers[0].id,
-      );
-
-      return newRecord;
+      return await this.tagsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       switch (error.code) {
         /** handling duplicate sql error */
@@ -48,21 +43,11 @@ export class TagsService {
     }
   }
 
-  async findAutoFilling(params: IAutoFilling) {
-    const { startWith, notInclude } = params;
-    const query = `
-      SELECT name FROM tags
-      WHERE name LIKE CONCAT("${startWith}","\%")
-        AND name NOT IN (${notInclude});
-    `;
-    return await this.tagsRepository.query(query);
-  }
-
   async edit(editTagDto: EditTagDTO) {
     const { id, name } = editTagDto;
     const newValue = this.tagsRepository.create({ name });
     await this.tagsRepository.update({ id }, newValue);
-    return HttpStatus.OK;
+    return await this.tagsRepository.findOne({ id });
   }
 
   async delete(id: number) {

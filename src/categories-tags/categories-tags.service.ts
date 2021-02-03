@@ -14,8 +14,8 @@ export class CategoriesTagsService {
   async create(category: number, tag: number) {
     try {
       const newRecord = this.categoriesTagsRepository.create({ category, tag });
-      await this.categoriesTagsRepository.insert(newRecord);
-      return HttpStatus.CREATED;
+      const res = await this.categoriesTagsRepository.insert(newRecord);
+      return await this.categoriesTagsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
     }
