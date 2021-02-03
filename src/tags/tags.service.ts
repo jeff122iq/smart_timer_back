@@ -15,8 +15,12 @@ export class TagsService {
 
   async create(createTagDto: CreateTagDTO): Promise<any> {
     try {
-      await this.tagsRepository.insert(createTagDto);
-      return HttpStatus.CREATED;
+      const res = await this.tagsRepository.insert(createTagDto);
+      const newRecord = await this.tagsRepository.findOne(
+        res.identifiers[0].id,
+      );
+
+      return newRecord;
     } catch (error) {
       switch (error.code) {
         /** handling duplicate sql error */
