@@ -17,9 +17,6 @@ export class Cards {
   @Column({ type: 'boolean', nullable: false })
   isMainField: boolean;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: string;
-
   @OneToMany((_) => CardsTags, (categoriesTags) => categoriesTags.card)
   cardsTags: Array<CardsTags>;
 

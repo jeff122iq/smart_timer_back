@@ -18,6 +18,9 @@ export class Briefs {
   @Column({ type: 'nvarchar', length: 100, nullable: false })
   name: string;
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: string;
+
   @ManyToOne((_) => Users, (user) => user.briefs, {
     nullable: false,
     onDelete: 'CASCADE',
