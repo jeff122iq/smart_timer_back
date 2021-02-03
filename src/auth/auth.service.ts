@@ -35,7 +35,6 @@ export class AuthService {
 
   async login(user: IUser) {
     const payload: ITokenPayload = { sub: user.id, email: user.email };
-    console.log(user);
     const role = await this.rolesService.getById((user.role as any).id);
 
     return {

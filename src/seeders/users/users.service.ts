@@ -21,7 +21,8 @@ export class UsersSeederService {
           if (dbUser) {
             return Promise.resolve(null);
           }
-          return Promise.resolve(this.usersRepository.insert(user));
+          const newUser = this.usersRepository.create(user);
+          return Promise.resolve(this.usersRepository.insert(newUser));
         })
         .catch((err) => Promise.reject(err));
     });
