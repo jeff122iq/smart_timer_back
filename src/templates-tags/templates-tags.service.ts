@@ -14,8 +14,8 @@ export class TemplatesTagsService {
   async create(template: number, tag: number) {
     try {
       const newRecord = this.templatesTagsRepository.create({ template, tag });
-      await this.templatesTagsRepository.insert(newRecord);
-      return HttpStatus.CREATED;
+      const res = await this.templatesTagsRepository.insert(newRecord);
+      return await this.templatesTagsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       console.log(error);
     }

@@ -16,8 +16,8 @@ export class CategoriesService {
   async create(createCategotyDto: CreateCategoryDTO) {
     try {
       const newCategory = this.categoryRepository.create(createCategotyDto);
-      await this.categoryRepository.insert(newCategory);
-      return HttpStatus.CREATED;
+      const res = await this.categoryRepository.insert(newCategory);
+      return await this.categoryRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       switch (error.code) {
         /** handling duplicate sql error */
@@ -48,6 +48,6 @@ export class CategoriesService {
     const { id, name } = editCategoryDTO;
     const newValue = this.categoryRepository.create({ name });
     await this.categoryRepository.update({ id }, newValue);
-    return HttpStatus.OK;
+    return await this.categoryRepository.findOne({ id });
   }
 }

@@ -14,9 +14,9 @@ export class BriefsService {
 
   async create(createBriefDto: CreateBriefDTO) {
     try {
-      const newCard = this.briefsRepository.create(createBriefDto);
-      await this.briefsRepository.insert(newCard);
-      return HttpStatus.CREATED;
+      const newBrief = this.briefsRepository.create(createBriefDto);
+      const res = await this.briefsRepository.insert(newBrief);
+      return await this.briefsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       switch (error.code) {
         case 'ER_NO_REFERENCED_ROW_2':

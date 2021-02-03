@@ -34,12 +34,6 @@ export class TagsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('autoFilling')
-  async findAutoFilling(@Query() params: IAutoFilling) {
-    return this.tagsService.findAutoFilling(params);
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Put()
   async edit(@Body() editTagDto: EditTagDTO) {
     return this.tagsService.edit(editTagDto);

@@ -1,3 +1,4 @@
+import { RolesModule } from './../roles/roles.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,9 +26,10 @@ import { LocalStrategy } from '../helpers/strategies/local.strategy';
       },
       inject: [ConfigService],
     }),
+    RolesModule,
     UsersModule,
     PassportModule,
-    TokenModule
+    TokenModule,
   ],
   providers: [AuthService, LocalStrategy, ConfigService, JwtStrategy],
   controllers: [AuthController],

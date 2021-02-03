@@ -14,8 +14,8 @@ export class CardsTagsService {
   async create(card: number, tag: number) {
     try {
       const newRecord = this.cardsTagsRepository.create({ card, tag });
-      await this.cardsTagsRepository.insert(newRecord);
-      return HttpStatus.CREATED;
+      const res = await this.cardsTagsRepository.insert(newRecord);
+      return await this.cardsTagsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
     }

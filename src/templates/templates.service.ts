@@ -16,8 +16,8 @@ export class TemplatesService {
   async create(createTemplateDto: CreateTemplateDTO) {
     try {
       const newTemplate = this.templatesRepository.create(createTemplateDto);
-      await this.templatesRepository.insert(newTemplate);
-      return HttpStatus.CREATED;
+      const res = await this.templatesRepository.insert(newTemplate);
+      return await this.templatesRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       switch (error.code) {
         /** handling duplicate sql error */
@@ -49,6 +49,6 @@ export class TemplatesService {
     const { id, name } = editTemplateDto;
     const newValue = this.templatesRepository.create({ name });
     await this.templatesRepository.update({ id }, newValue);
-    return HttpStatus.OK;
+    return await this.templatesRepository.findOne({ id });
   }
 }

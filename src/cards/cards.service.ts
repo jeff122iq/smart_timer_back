@@ -15,8 +15,8 @@ export class CardsService {
   async create(createCardDto: CreateCardDTO) {
     try {
       const newCard = this.cardsRepository.create(createCardDto);
-      await this.cardsRepository.insert(newCard);
-      return HttpStatus.CREATED;
+      const res = await this.cardsRepository.insert(newCard);
+      return await this.cardsRepository.findOne(res.identifiers[0].id);
     } catch (error) {
       switch (error.code) {
         default:
@@ -33,8 +33,12 @@ export class CardsService {
   }
 
   async edit(editCardDto: EditCardDTO) {
-    const { id, description, title, isMainFiled} = editCardDto;
-    const newValue = this.cardsRepository.create({ description, title, isMainFiled });
+    const { id, description, title, isMainFiled } = editCardDto;
+    const newValue = this.cardsRepository.create({
+      description,
+      title,
+      isMainFiled,
+    });
     await this.cardsRepository.update({ id }, newValue);
     return HttpStatus.OK;
   }
