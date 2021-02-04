@@ -14,7 +14,7 @@ export class Cards {
   @Column({ type: 'text', nullable: false })
   description: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', nullable: true })
   isMainField: boolean;
 
   @OneToMany((_) => CardsTags, (categoriesTags) => categoriesTags.card)
