@@ -10,6 +10,7 @@ import {
   Put,
   Delete,
   Query,
+  Param,
 } from '@nestjs/common';
 import { BriefsService } from './briefs.service';
 
@@ -27,6 +28,11 @@ export class BriefsController {
   @Get()
   async findAll() {
     return this.briefsService.findAll();
+  }
+
+  @Get(":id")
+  async findById(@Param('id') id: number) {
+    return this.briefsService.findById(id);
   }
 
   @UseGuards(JwtAuthGuard)

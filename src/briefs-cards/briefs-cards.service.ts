@@ -1,3 +1,6 @@
+import { Cards } from 'src/helpers/entities/cards.entity';
+import { Briefs } from './../helpers/entities/briefs.entity';
+import { IBrief } from './../helpers/interfaces/brief.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
@@ -32,6 +35,24 @@ export class BriefsCardsService {
     } catch (error) {
       throw new HttpException('Cannot update data', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async findById(id: number) {
+    const briefsCards = await this.briefsCardsRepository.find({
+      relations: ['card', 'brief'],
+      where: `brief_id = ${id}`,
+    });
+    const brief: IBrief = {
+      id: (briefsCards[0].brief as Briefs).id,
+      name: (briefsCards[0].brief as Briefs).name,
+      cards: briefsCards.map((data) => ({
+        id: (data.card as Cards).id,
+        description: (data.card as Cards).description,
+        title: (data.card as Cards).title,
+        serial_num: data.serial_num,
+      })),
+    };
+    return brief;
   }
 
   async deleteById(id: number) {

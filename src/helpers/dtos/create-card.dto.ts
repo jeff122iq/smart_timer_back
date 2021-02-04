@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCardDTO {
   @IsNotEmpty()
@@ -9,7 +9,7 @@ export class CreateCardDTO {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
   isMainField: boolean;
 }

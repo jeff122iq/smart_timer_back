@@ -1,4 +1,12 @@
-import { Controller, Post, UseGuards, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  Put,
+  Delete,
+  Query,
+} from '@nestjs/common';
 
 import { BriefsCardsService } from './briefs-cards.service';
 import { JwtAuthGuard } from './../helpers/guards/jwt-auth.guard';
@@ -21,5 +29,11 @@ export class BriefsCardsController {
   async edit(@Body() createBriefsCardsDto: EditBriefsCardsDTO) {
     const { id, serial_num } = createBriefsCardsDto;
     return this.briefsCardsService.edit(id, serial_num);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async delete(@Query('id') id: number) {
+    return this.briefsCardsService.deleteById(id);
   }
 }
