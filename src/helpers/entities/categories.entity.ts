@@ -10,6 +10,12 @@ export class Categories {
   @Column({ type: 'nvarchar', length: 50, unique: true, nullable: false })
   name: string;
 
-  @OneToMany((_) => CategoriesTags, (categoriesTags) => categoriesTags.category)
+  @OneToMany(
+    (_) => CategoriesTags,
+    (categoriesTags) => categoriesTags.category,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   categoriesTags: Array<CategoriesTags>;
 }

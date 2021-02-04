@@ -27,16 +27,19 @@ export class CategoriesController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.categoryService.findAll();
   }
 
   @Delete()
+  @UseGuards(JwtAuthGuard)
   async delete(@Query('id') id: number) {
     return this.categoryService.delete(id);
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard)
   async edit(@Body() editCategoryDto: EditCategoryDTO) {
     return this.categoryService.edit(editCategoryDto);
   }
