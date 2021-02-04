@@ -17,9 +17,12 @@ import { TemplatesTagsModule } from './templates-tags/templates-tags.module';
 import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
 import { CardsTagsModule } from './cards-tags/cards-tags.module';
 import { BriefsCardsModule } from './briefs-cards/briefs-cards.module';
+import { TaskModule } from './task/task.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       load: [configuration],
     }),
@@ -51,6 +54,7 @@ import { BriefsCardsModule } from './briefs-cards/briefs-cards.module';
     CategoriesTagsModule,
     CardsTagsModule,
     BriefsCardsModule,
+    TaskModule,
   ],
 })
 export class AppModule {}
