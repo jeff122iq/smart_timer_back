@@ -7,6 +7,7 @@ import {
   Delete,
   Query,
   Put,
+  Param,
 } from '@nestjs/common';
 
 import { EditTemplateDTO } from './../helpers/dtos/edit-template.dto';
@@ -28,6 +29,11 @@ export class TemplatesController {
   @Get()
   async findAll() {
     return this.templatesService.findAll();
+  }
+
+  @Get(":id")
+  async findById(@Param('id') id: number) {
+    return this.templatesService.findById(id);
   }
 
   @UseGuards(JwtAuthGuard)

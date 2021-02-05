@@ -1,7 +1,7 @@
 import { RolesService } from './../roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpStatus } from '@nestjs/common';
 
 import { UsersService } from './../users/users.service';
 import { TokenService } from './../token/token.service';
@@ -42,6 +42,15 @@ export class AuthService {
       email: user.email,
       role: role.name,
     };
+  }
+
+  async validateAccessToken(access_token: string) {
+    try {
+      this.jwtService.verify(access_token);
+      return HttpStatus.OK;
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 
   async validateRefreshToken(refresh_token_id: string) {

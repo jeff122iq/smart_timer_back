@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TagsModule } from './tags/tags.module';
 import { AuthModule } from './auth/auth.module';
+import { TaskModule } from './task/task.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { TokenModule } from './token/token.module';
@@ -12,13 +14,11 @@ import configuration from '../config/configuration';
 import { BriefsModule } from './briefs/briefs.module';
 import { SeedersModule } from './seeders/seeders.module';
 import { TemplatesModule } from './templates/templates.module';
-import { CategoriesModule } from './categories/categories.module';
-import { TemplatesTagsModule } from './templates-tags/templates-tags.module';
-import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
 import { CardsTagsModule } from './cards-tags/cards-tags.module';
+import { CategoriesModule } from './categories/categories.module';
 import { BriefsCardsModule } from './briefs-cards/briefs-cards.module';
-import { TaskModule } from './task/task.module';
-import { ScheduleModule } from '@nestjs/schedule';
+import { CategoriesTagsModule } from './categories-tags/categories-tags.module';
+import { TemplatesCardsModule } from './templates-cards/templates-cards.module';
 
 @Module({
   imports: [
@@ -50,11 +50,11 @@ import { ScheduleModule } from '@nestjs/schedule';
     SeedersModule,
     TemplatesModule,
     CategoriesModule,
-    TemplatesTagsModule,
     CategoriesTagsModule,
     CardsTagsModule,
     BriefsCardsModule,
     TaskModule,
+    TemplatesCardsModule,
   ],
 })
 export class AppModule {}

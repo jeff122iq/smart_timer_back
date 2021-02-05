@@ -51,20 +51,13 @@ export class BriefsService {
         await queryRunner.manager.insert(BriefsCards, newBriefCard);
       });
       await queryRunner.commitTransaction();
-      const createdBrief = await this.briefsRepository.findOne(
-        res.identifiers[0].id,
-      );
+      const createdBrief = await this.briefsRepository.findOne(brief);
       const url = `http://localhost:5000/briefs/${brief}`;
       return { createdBrief, url };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       switch (error.code) {
-        case 'ER_NO_REFERENCED_ROW_2':
-          throw new HttpException(
-            "Current user doesn't exist",
-            HttpStatus.BAD_REQUEST,
-          );
-        default:
+         default:
           throw new HttpException(
             'Cannot insert current brief',
             HttpStatus.BAD_REQUEST,
