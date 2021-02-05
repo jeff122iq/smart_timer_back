@@ -19,6 +19,11 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @Post('/validate')
+  async validate(@Body("access_token") access_token) {
+    return this.authService.validateAccessToken(access_token);
+  }
+
   @Post('/refresh')
   async refresh(@Body("refresh_token_id") refresh_token_id) {
     return this.authService.validateRefreshToken(refresh_token_id);

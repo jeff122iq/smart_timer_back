@@ -1,3 +1,4 @@
+import { CategoriesTagsService } from './../categories-tags/categories-tags.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
@@ -10,6 +11,7 @@ import { CreateTagDTO } from './../helpers/dtos/create-tag.dto';
 export class TagsService {
   constructor(
     @InjectRepository(Tags) private readonly tagsRepository: Repository<Tags>,
+    private readonly categoriesTagsService: CategoriesTagsService,
   ) {}
 
   async create(createTagDto: CreateTagDTO): Promise<any> {
@@ -41,6 +43,10 @@ export class TagsService {
       console.log(error);
       throw new HttpException('Cannot fetch tags', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async findByCategoryId(id: number) {
+    return this.categoriesTagsService.getByCategoryId(id);
   }
 
   async edit(editTagDto: EditTagDTO) {

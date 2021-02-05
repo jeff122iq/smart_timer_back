@@ -7,6 +7,7 @@ import {
   Query,
   Put,
   Delete,
+  Param,
 } from '@nestjs/common';
 
 import { TagsService } from './tags.service';
@@ -31,6 +32,12 @@ export class TagsController {
   @Get('')
   async findAll() {
     return this.tagsService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async findByCategoryId(@Param('id') id: number) {
+    return this.tagsService.findByCategoryId(id);
   }
 
   @UseGuards(JwtAuthGuard)

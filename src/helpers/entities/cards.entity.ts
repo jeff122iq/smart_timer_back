@@ -1,3 +1,4 @@
+import { TemplatesCards } from './templates-cards.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CardsTags } from './cards-tags.entity';
@@ -16,6 +17,9 @@ export class Cards {
 
   @Column({ type: 'boolean', nullable: true })
   isMainField: boolean;
+
+  @OneToMany((_) => TemplatesCards, (templatesCards) => templatesCards.card)
+  templatesCards: Array<TemplatesCards>;
 
   @OneToMany((_) => CardsTags, (categoriesTags) => categoriesTags.card)
   cardsTags: Array<CardsTags>;

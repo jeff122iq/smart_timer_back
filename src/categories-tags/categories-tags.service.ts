@@ -21,12 +21,15 @@ export class CategoriesTagsService {
     }
   }
 
-  async deleteById(id: number) {
-    try {
-      await this.categoriesTagsRepository.delete(id);
-      return HttpStatus.OK;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+  async getByCategoryId(id: number) {
+    const res = await this.categoriesTagsRepository.find({
+      where: `category_id = ${id}`,
+      relations: ['tag'],
+    });
+
+    return res.reduce((prev, curr) => {
+      prev.push({ id: (curr.tag as any).id, name: (curr.tag as any).name });
+      return prev;
+    }, []);
   }
 }
