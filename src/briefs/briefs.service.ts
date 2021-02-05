@@ -57,7 +57,7 @@ export class BriefsService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       switch (error.code) {
-         default:
+        default:
           throw new HttpException(
             'Cannot insert current brief',
             HttpStatus.BAD_REQUEST,
@@ -84,7 +84,26 @@ export class BriefsService {
   }
 
   async delete(id: number) {
-    await this.briefsRepository.delete({ id });
-    return HttpStatus.OK;
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const brief = await this.briefsCardsService.findById(id);
+      const cardsToDelete = brief.cards.filter(
+        (card) => card.isMainField === null,
+      );
+      cardsToDelete.forEach(async (card) => {
+        await queryRunner.manager.delete(Cards, { id: card.id });
+      });
+
+      await queryRunner.manager.delete(Briefs, { id });
+      await queryRunner.commitTransaction();
+      return HttpStatus.OK;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

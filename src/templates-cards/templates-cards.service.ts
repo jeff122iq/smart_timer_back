@@ -23,6 +23,7 @@ export class TemplatesCardsService {
         id: (data.card as any).id,
         description: (data.card as any).description,
         title: (data.card as any).title,
+        isMainField: (data.card as any).isMainField,
         serial_num: data.serial_num,
       })),
     };

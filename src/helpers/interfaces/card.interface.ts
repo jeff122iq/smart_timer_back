@@ -3,4 +3,5 @@ export interface ICard {
   title: string;
   description: string;
   serial_num?: number;
+  isMainField?: boolean;
 }
