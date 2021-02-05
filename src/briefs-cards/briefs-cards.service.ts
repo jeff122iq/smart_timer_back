@@ -49,6 +49,7 @@ export class BriefsCardsService {
         id: (data.card as Cards).id,
         description: (data.card as Cards).description,
         title: (data.card as Cards).title,
+        isMainField: (data.card as Cards).isMainField,
         serial_num: data.serial_num,
       })),
     };
