@@ -1,7 +1,12 @@
 import { RolesService } from './../roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, UnauthorizedException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 
 import { UsersService } from './../users/users.service';
 import { TokenService } from './../token/token.service';
@@ -9,7 +14,6 @@ import { LoginUserDTO } from '../helpers/dtos/login-user.dto';
 import { IUser } from './../helpers/interfaces/user.interface';
 import { CreateUserDTO } from './../helpers/dtos/create-user.dto';
 import { ITokenPayload } from './../helpers/interfaces/token-payload.interface';
-import { ITokenLoginData } from 'src/helpers/interfaces/token-login-data.interface';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +25,26 @@ export class AuthService {
   ) {}
 
   async register(user: CreateUserDTO) {
-    return this.usersService.insert(user);
+    try {
+      let createdUser = await this.usersService.insert(user);
+      createdUser = await this.usersService.findOneById(createdUser.id);
+      return this.login(createdUser);
+    } catch (error) {
+      switch (error.code) {
+        /** handling duplicate sql error */
+        case 'ER_DUP_ENTRY':
+          throw new HttpException(
+            'User with this email already exist',
+            HttpStatus.CONFLICT,
+          );
+
+        default:
+          throw new HttpException(
+            'Cannot register current user, try again later',
+            HttpStatus.BAD_REQUEST,
+          );
+      }
+    }
   }
 
   async validateUser(loginUser: LoginUserDTO) {
@@ -34,14 +57,13 @@ export class AuthService {
   }
 
   async login(user: IUser) {
-    const payload: ITokenPayload = { sub: user.id, email: user.email };
     const role = await this.rolesService.getById((user.role as any).id);
-
-    return {
-      ...(await this.generateTokens(payload)),
+    const payload: ITokenPayload = {
+      sub: user.id,
       email: user.email,
       role: role.name,
     };
+    return await this.generateTokens(payload);
   }
 
   async validateAccessToken(access_token: string) {
@@ -57,8 +79,10 @@ export class AuthService {
     try {
       const token = await this.tokenService.findOneAndDelete(refresh_token_id);
 
-      const { sub, email } = this.jwtService.verify(token.token);
-      const payload: ITokenPayload = { sub, email };
+      const { sub, email, role }: ITokenPayload = this.jwtService.verify(
+        token.token,
+      );
+      const payload: ITokenPayload = { sub, email, role };
       return this.generateTokens(payload);
     } catch (error) {
       console.log(error.message);
