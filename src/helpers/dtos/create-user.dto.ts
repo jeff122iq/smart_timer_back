@@ -10,12 +10,12 @@ import {
 export class CreateUserDTO {
   @IsNotEmpty()
   @IsEmail()
-  @MinLength(8)
-  @MaxLength(16)
   email: string;
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
+  @MaxLength(16)
   password: string;
 
   @IsNotEmpty()
