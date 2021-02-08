@@ -49,11 +49,17 @@ export class AuthService {
 
   async validateUser(loginUser: LoginUserDTO) {
     const user = await this.usersService.findOne(loginUser.email);
-    if (user && bcrypt.compareSync(loginUser.password, user.password)) {
-      const { password, ...result } = user;
-      return result;
+    if (!user)
+      throw new HttpException(
+        'User with current email does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    if (!bcrypt.compareSync(loginUser.password, user.password)) {
+      return null;
     }
-    return null;
+    
+    const { password, ...result } = user;
+    return result;
   }
 
   async login(user: IUser) {
