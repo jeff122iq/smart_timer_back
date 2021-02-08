@@ -8,6 +8,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
+    app.enableCors();
     const logger = app.get(Logger);
     const seeder = app.get(Seeder);
 
