@@ -1,15 +1,17 @@
+import { CardsTagsService } from './../cards-tags/cards-tags.service';
 import { EditCardDTO } from './../helpers/dtos/edit-card.dto';
 import { CreateCardDTO } from './../helpers/dtos/create-card.dto';
 import { Cards } from './../helpers/entities/cards.entity';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class CardsService {
   constructor(
     @InjectRepository(Cards)
     private readonly cardsRepository: Repository<Cards>,
+    private readonly cardsTagsService: CardsTagsService,
   ) {}
 
   async create(createCardDto: CreateCardDTO) {
@@ -28,8 +30,10 @@ export class CardsService {
     }
   }
 
-  async findAll() {
-    return this.cardsRepository.find();
+  async findAllByTagsId(tags: number[]) {
+    const cardsTags = await this.cardsTagsService.findAllByTagsId(tags);
+    const cards = cardsTags.map((ct) => (ct.card as any).id);
+    return this.cardsRepository.find({ where: { id: In(cards) } });
   }
 
   async edit(editCardDto: EditCardDTO) {

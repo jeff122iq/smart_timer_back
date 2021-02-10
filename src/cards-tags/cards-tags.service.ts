@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 
@@ -28,5 +28,12 @@ export class CardsTagsService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async findAllByTagsId(tags: number[]) {
+    return await this.cardsTagsRepository.find({
+      where: { tag: In(tags) },
+      relations: ['card'],
+    });
   }
 }

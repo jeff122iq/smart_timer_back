@@ -24,20 +24,20 @@ export class CardsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
-  async findAll() {
-    return this.cardsService.findAll();
+  @Post('get')
+  async findAllByTagId(@Body('tags') tags: number[]) {
+    return this.cardsService.findAllByTagsId(tags);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put()
-  async edit(@Body() editCardDto:EditCardDTO) {
-      return this.cardsService.edit(editCardDto);
+  async edit(@Body() editCardDto: EditCardDTO) {
+    return this.cardsService.edit(editCardDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete()
   async delete(@Query('id') id: number) {
-      return this.cardsService.delete(id)
+    return this.cardsService.delete(id);
   }
 }
