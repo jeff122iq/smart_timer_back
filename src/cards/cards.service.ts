@@ -32,8 +32,10 @@ export class CardsService {
 
   async findAllByTagsId(tags: number[]) {
     const cardsTags = await this.cardsTagsService.findAllByTagsId(tags);
-    const cards = cardsTags.map((ct) => (ct.card as any).id);
-    return this.cardsRepository.find({ where: { id: In(cards) } });
+    return cardsTags.map((ct) => ({
+      ...(ct.card as object),
+      tag: (ct.tag as any).id,
+    }));
   }
 
   async edit(editCardDto: EditCardDTO) {

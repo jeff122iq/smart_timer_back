@@ -33,7 +33,7 @@ export class CardsTagsService {
   async findAllByTagsId(tags: number[]) {
     return await this.cardsTagsRepository.find({
       where: { tag: In(tags) },
-      relations: ['card'],
+      relations: ['card', 'tag'],
     });
   }
 }
