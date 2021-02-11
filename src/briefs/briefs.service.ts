@@ -22,8 +22,8 @@ export class BriefsService {
     private readonly connection: Connection,
   ) {}
 
-  async create(createBriefDto: CreateBriefDTO) {
-    const { cards, name, user } = createBriefDto;
+  async create(createBriefDto: CreateBriefDTO, user: number) {
+    const { cards, name } = createBriefDto;
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -68,8 +68,8 @@ export class BriefsService {
     }
   }
 
-  async findAll() {
-    return this.briefsRepository.find();
+  async findByUserId(user: number) {
+    return this.briefsRepository.find({ user });
   }
 
   async findById(id: number) {

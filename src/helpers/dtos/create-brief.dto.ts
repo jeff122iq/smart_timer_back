@@ -8,9 +8,5 @@ export class CreateBriefDTO {
 
   @IsArray()
   @IsNotEmpty()
-  cards: Array<number | CreateCardDTO>;
-
-  @IsNotEmpty()
-  @IsNumber()
-  user: number;
+  cards: Array<CreateCardDTO>;
 }

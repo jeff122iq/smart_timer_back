@@ -11,6 +11,7 @@ import {
   Delete,
   Query,
   Param,
+  Request,
 } from '@nestjs/common';
 import { BriefsService } from './briefs.service';
 
@@ -20,17 +21,17 @@ export class BriefsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createBriefDto: CreateBriefDTO) {
-    return this.briefsService.create(createBriefDto);
+  async create(@Body() createBriefDto: CreateBriefDTO, @Request() req) {
+    return this.briefsService.create(createBriefDto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll() {
-    return this.briefsService.findAll();
+  async findByUserId(@Request() req) {
+    return this.briefsService.findByUserId(req.user.id);
   }
 
-  @Get(":id")
+  @Get(':id')
   async findById(@Param('id') id: number) {
     return this.briefsService.findById(id);
   }
