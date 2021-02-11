@@ -52,8 +52,7 @@ export class BriefsService {
       });
       await queryRunner.commitTransaction();
       const createdBrief = await this.briefsRepository.findOne(brief);
-      const url = `http://localhost:5000/briefs/${brief}`;
-      return { createdBrief, url };
+      return createdBrief;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       switch (error.code) {
