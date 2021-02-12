@@ -8,6 +8,7 @@ import { Seeder } from './seeders/seeders';
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
+    const config = app.get('ConfigService');
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
     app.use((req: Request, res: Response, next: NextFunction) => {
@@ -26,8 +27,7 @@ async function bootstrap() {
         logger.error('Seeding failed');
         throw err;
       });
-
-    await app.listen(5000);
+    await app.listen(config.get('app.port'));
   } catch (err) {
     console.error(err);
   }

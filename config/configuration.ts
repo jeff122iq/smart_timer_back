@@ -9,4 +9,7 @@ export default () => ({
   jwt: {
     secret: process.env.JWT_SECRET,
   },
+  app: {
+    port: process.env.PORT || 5000,
+  },
 });
