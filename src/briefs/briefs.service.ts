@@ -1,5 +1,4 @@
 import { BriefsCardsService } from './../briefs-cards/briefs-cards.service';
-import { IBrief } from './../helpers/interfaces/brief.interface';
 import { BriefsCards } from './../helpers/entities/briefs-cards.entity';
 import { Cards } from 'src/helpers/entities/cards.entity';
 import { EditBriefDTO } from './../helpers/dtos/edit-brief.dto';
@@ -34,10 +33,12 @@ export class BriefsService {
       const brief = res.identifiers[0].id;
 
       const card_ids: number[] = await Promise.all(
-        cards.map(async (card) => {
-          if (typeof card === 'number') return card;
-
-          const newCards = this.cardsRepository.create(card);
+        cards.map(async ({ title, description, isMainField }) => {
+          const newCards = this.cardsRepository.create({
+            title,
+            description,
+            isMainField,
+          });
           const newRecord = await queryRunner.manager.insert(Cards, newCards);
           return newRecord.identifiers[0].id;
         }),
