@@ -22,7 +22,9 @@ export class BriefsCardsService {
         serial_num,
       });
       const res = await this.briefsCardsRepository.insert(newRecord);
-      return await this.briefsCardsRepository.findOne(res.identifiers[0].id);
+      return await this.briefsCardsRepository.findOne({
+        id: res.identifiers[0].id,
+      });
     } catch (error) {
       throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
     }

@@ -14,10 +14,10 @@ export class TagsService {
     private readonly categoriesTagsService: CategoriesTagsService,
   ) {}
 
-  async create(createTagDto: CreateTagDTO): Promise<any> {
+  async create(createTagDto: CreateTagDTO): Promise<number> {
     try {
       const res = await this.tagsRepository.insert(createTagDto);
-      return await this.tagsRepository.findOne(res.identifiers[0].id);
+      return (await this.tagsRepository.findOne(res.identifiers[0].id)).id;
     } catch (error) {
       switch (error.code) {
         /** handling duplicate sql error */

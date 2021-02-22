@@ -10,7 +10,7 @@ import {
 
 import { UsersService } from './../users/users.service';
 import { TokenService } from './../token/token.service';
-import { LoginUserDTO } from '../helpers/dtos/login-user.dto';
+import { IUserLogin } from '../helpers/interfaces/login-user.dto';
 import { IUser } from './../helpers/interfaces/user.interface';
 import { CreateUserDTO } from './../helpers/dtos/create-user.dto';
 import { ITokenPayload } from './../helpers/interfaces/token-payload.interface';
@@ -47,7 +47,7 @@ export class AuthService {
     }
   }
 
-  async validateUser(loginUser: LoginUserDTO) {
+  async validateUser(loginUser: IUserLogin) {
     const user = await this.usersService.findOne(loginUser.email);
     if (!user)
       throw new HttpException(
@@ -57,12 +57,12 @@ export class AuthService {
     if (!bcrypt.compareSync(loginUser.password, user.password)) {
       return null;
     }
-    
+
     const { password, ...result } = user;
     return result;
   }
 
-  async login(user: IUser) {
+  async login(user: IUserLogin) {
     const role = await this.rolesService.getById((user.role as any).id);
     const payload: ITokenPayload = {
       sub: user.id,

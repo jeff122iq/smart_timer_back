@@ -1,3 +1,4 @@
+import { CreateTagDTO } from './create-tag.dto';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateCategoriesTagsDTO {
@@ -7,5 +8,5 @@ export class CreateCategoriesTagsDTO {
 
   @IsNotEmpty()
   @IsNumber()
-  tag: number;
+  tag: number | CreateTagDTO;
 }

@@ -11,7 +11,6 @@ export class CategoriesTagsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createBriefsCardsDto: CreateCategoriesTagsDTO) {
-    const { category, tag } = createBriefsCardsDto;
-    return this.categoriesTagsService.create(category, tag);
+    return this.categoriesTagsService.create(createBriefsCardsDto);
   }
 }

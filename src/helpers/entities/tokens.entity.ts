@@ -16,7 +16,10 @@ export class Tokens {
   @Column({ type: 'text', nullable: false })
   token: string;
 
-  @ManyToOne((_) => Users, (user) => user.tokens, { nullable: false })
+  @ManyToOne((_) => Users, (user) => user.tokens, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: Array<Tokens> | number;
 }
