@@ -20,7 +20,7 @@ export class TaskService {
       .createQueryBuilder()
       .delete()
       .where('created_at <= :date', {
-        date: moment().subtract(5, 'day').toDate(),
+        date: moment().subtract(7, 'day').toDate(),
       })
       .execute();
     this.logger.debug('Deleting briefs finished');

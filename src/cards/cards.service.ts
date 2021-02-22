@@ -4,7 +4,7 @@ import { CreateCardDTO } from './../helpers/dtos/create-card.dto';
 import { Cards } from './../helpers/entities/cards.entity';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Repository, Connection } from 'typeorm';
 
 @Injectable()
 export class CardsService {
@@ -12,14 +12,23 @@ export class CardsService {
     @InjectRepository(Cards)
     private readonly cardsRepository: Repository<Cards>,
     private readonly cardsTagsService: CardsTagsService,
+    private readonly connection: Connection,
   ) {}
 
   async create(createCardDto: CreateCardDTO) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
       const newCard = this.cardsRepository.create(createCardDto);
       const res = await this.cardsRepository.insert(newCard);
-      return await this.cardsRepository.findOne(res.identifiers[0].id);
+      const newCardRecord = await this.cardsRepository.findOne(
+        res.identifiers[0].id,
+      );
+      await queryRunner.commitTransaction();
+      return newCardRecord;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       switch (error.code) {
         default:
           throw new HttpException(
@@ -27,6 +36,8 @@ export class CardsService {
             HttpStatus.BAD_REQUEST,
           );
       }
+    } finally {
+      await queryRunner.release();
     }
   }
 

@@ -17,7 +17,6 @@ export class TokenService {
 
   async insert(token: string, user: number): Promise<string> {
     const newToken = this.tokenRepository.create({ token, user });
-    
     const insertResult = await this.tokenRepository.insert(newToken);
     return insertResult.identifiers[0].id;
   }

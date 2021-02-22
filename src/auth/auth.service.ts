@@ -62,7 +62,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: IUserLogin) {
+  async login(user: IUser) {
     const role = await this.rolesService.getById((user.role as any).id);
     const payload: ITokenPayload = {
       sub: user.id,

@@ -1,5 +1,5 @@
 import { CategoriesTagsService } from './../categories-tags/categories-tags.service';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 
@@ -12,13 +12,22 @@ export class TagsService {
   constructor(
     @InjectRepository(Tags) private readonly tagsRepository: Repository<Tags>,
     private readonly categoriesTagsService: CategoriesTagsService,
+    private readonly connection: Connection,
   ) {}
 
-  async create(createTagDto: CreateTagDTO): Promise<number> {
+  async create(createTagDto: CreateTagDTO): Promise<any> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
       const res = await this.tagsRepository.insert(createTagDto);
-      return (await this.tagsRepository.findOne(res.identifiers[0].id)).id;
+      const newTagRecord = await this.tagsRepository.findOne(
+        res.identifiers[0].id,
+      );
+      await queryRunner.commitTransaction();
+      return newTagRecord;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       switch (error.code) {
         /** handling duplicate sql error */
         case 'ER_DUP_ENTRY':
@@ -33,6 +42,8 @@ export class TagsService {
             HttpStatus.BAD_REQUEST,
           );
       }
+    } finally {
+      await queryRunner.release();
     }
   }
 

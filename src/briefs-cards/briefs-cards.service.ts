@@ -1,7 +1,7 @@
 import { Cards } from 'src/helpers/entities/cards.entity';
 import { Briefs } from './../helpers/entities/briefs.entity';
 import { IBrief } from './../helpers/interfaces/brief.interface';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 
@@ -12,9 +12,13 @@ export class BriefsCardsService {
   constructor(
     @InjectRepository(BriefsCards)
     private readonly briefsCardsRepository: Repository<BriefsCards>,
+    private readonly connection: Connection,
   ) {}
 
   async create(brief: number, card: number, serial_num: number) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
       const newRecord = this.briefsCardsRepository.create({
         brief,
@@ -22,11 +26,16 @@ export class BriefsCardsService {
         serial_num,
       });
       const res = await this.briefsCardsRepository.insert(newRecord);
-      return await this.briefsCardsRepository.findOne({
+      const newBriefsCardsRecord = await this.briefsCardsRepository.findOne({
         id: res.identifiers[0].id,
       });
+      await queryRunner.commitTransaction();
+      return newBriefsCardsRecord;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       throw new HttpException('Cannot insert data', HttpStatus.BAD_REQUEST);
+    } finally {
+      await queryRunner.release();
     }
   }
 

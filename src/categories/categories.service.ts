@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 
@@ -11,14 +11,23 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Categories)
     private readonly categoryRepository: Repository<Categories>,
+    private readonly connection: Connection,
   ) {}
 
   async create(createCategotyDto: CreateCategoryDTO) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
     try {
       const newCategory = this.categoryRepository.create(createCategotyDto);
       const res = await this.categoryRepository.insert(newCategory);
-      return await this.categoryRepository.findOne(res.identifiers[0].id);
+      const newCateforyRecord = await this.categoryRepository.findOne(
+        res.identifiers[0].id,
+      );
+      await queryRunner.commitTransaction();
+      return newCateforyRecord;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       switch (error.code) {
         /** handling duplicate sql error */
         case 'ER_DUP_ENTRY':
@@ -33,6 +42,8 @@ export class CategoriesService {
             HttpStatus.BAD_REQUEST,
           );
       }
+    } finally {
+      await queryRunner.release();
     }
   }
 
