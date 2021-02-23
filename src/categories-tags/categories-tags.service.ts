@@ -19,15 +19,15 @@ export class CategoriesTagsService {
   ) {}
 
   async create(createCategoriesTagsDto: CreateCategoriesTagsDTO) {
-    let { category, tag } = createCategoriesTagsDto;
+    let { category, tag: newTag } = createCategoriesTagsDto;
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      if (tag instanceof CreateTagDTO) {
-        const res = await this.tagsRepository.insert({ name: tag.name });
-        tag = res.identifiers[0].id as number;
-      }
+      const newTagRecord = await this.tagsRepository.insert({
+        name: newTag.name,
+      });
+      const tag = newTagRecord.identifiers[0].id;
 
       const newRecord = this.categoriesTagsRepository.create({
         category,

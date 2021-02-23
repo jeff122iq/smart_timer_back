@@ -7,6 +7,5 @@ export class CreateCategoriesTagsDTO {
   category: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  tag: number | CreateTagDTO;
+  tag: CreateTagDTO;
 }
