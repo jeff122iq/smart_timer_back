@@ -11,7 +11,6 @@ export class CardsTagsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createBriefsCardsDto: CreateCardsTagsDTO) {
-    const { tag, card } = createBriefsCardsDto;
-    return this.cardsTagsService.create(card, tag);
+    return this.cardsTagsService.create(createBriefsCardsDto);
   }
 }

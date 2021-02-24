@@ -1,3 +1,4 @@
+import { CreateCardDTO } from './create-card.dto';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateCardsTagsDTO {
@@ -6,6 +7,5 @@ export class CreateCardsTagsDTO {
   tag: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  card: number;
+  card: CreateCardDTO;
 }
