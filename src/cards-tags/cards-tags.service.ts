@@ -24,15 +24,16 @@ export class CardsTagsService {
       const insertedCardResult = await this.cardsRepository.insert(
         createCardsTagsDto.card,
       );
-      const card = insertedCardResult.identifiers[0].id
+      const card = insertedCardResult.identifiers[0].id;
       const { tag } = createCardsTagsDto;
       const newRecord = this.cardsTagsRepository.create({ card, tag });
       const res = await this.cardsTagsRepository.insert(newRecord);
-      const newCardsTagsRecord = await this.cardsTagsRepository.findOne({
-        id: res.identifiers[0].id,
-      });
+      const newCardsTagsRecord = await this.cardsTagsRepository.findOne(
+        { id: res.identifiers[0].id },
+        { relations: ['card'] },
+      );
       await queryRunner.commitTransaction();
-      return newCardsTagsRecord;
+      return newCardsTagsRecord.card;
     } catch (error) {
       console.log(error);
 
