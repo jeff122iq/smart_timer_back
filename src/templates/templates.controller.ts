@@ -37,8 +37,8 @@ export class TemplatesController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete()
-  async delete(@Query('id') id: number) {
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
     return this.templatesService.delete(id);
   }
 
